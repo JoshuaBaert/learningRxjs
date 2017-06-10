@@ -15,7 +15,12 @@ export class AppComponent {
             .map(e => e.target.value)
             .filter(text => text.length >=3)
             .debounceTime(400)
-            .distinctUntilChanged();
+            .distinctUntilChanged()
+            .flatMap(searchTerm => {
+                let url = 'https://api.spotify.com/v1/search?type=artist&q=' + searchTerm;
+                return Observable.fromPromise($.getJSON(url));
+            });
+        // Doesn't work because spotify has changed service
 
         keyups.subscribe(data => console.log(data))
     }

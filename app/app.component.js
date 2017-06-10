@@ -28,7 +28,12 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         .map(function (e) { return e.target.value; })
                         .filter(function (text) { return text.length >= 3; })
                         .debounceTime(400)
-                        .distinctUntilChanged();
+                        .distinctUntilChanged()
+                        .flatMap(function (searchTerm) {
+                        var url = 'https://api.spotify.com/v1/search?type=artist&q=' + searchTerm;
+                        return Rx_1.Observable.fromPromise($.getJSON(url));
+                    });
+                    // Doesn't work because spotify has changed service
                     keyups.subscribe(function (data) { return console.log(data); });
                 }
                 AppComponent = __decorate([
